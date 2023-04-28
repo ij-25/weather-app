@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <link href="/dist/output.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="flex justify-center items-center min-h-screen">
+    <div
+      class="card flex flex-col items-center bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% rounded-xl w-[900px] h-[750px]"
+    >
+      <div class="search mt-5 flex gap-x-6">
+        <input
+          type="text"
+          placeholder="   enter city name"
+          spellcheck="false"
+          class="searchQuery border-2 h-[30px] rounded-xl p-3"
+        />
+        <button
+          class="flex justify-center items-center rounded-xl p-4 cursor-pointer bg-white h-2"
+        >
+          <img src="search.png" alt="" width="15px" />
+        </button>
+      </div>
+      <div class="weather flex flex-col items-center mt-[50px]">
+        <img src="rain.png" alt="" class="weather-icon" />
+        <p class="temp text-2xl text-white font-bold">31°C</p>
+        <p class="city text-2xl text-white font-bold">New York</p>
+        <div
+          class="details flex justify-between items-center w-[900px] mt-11 px-14"
+        >
+          <div class="col">
+            <img src="humidity.png" alt="" />
+            <div>
+              <p class="humidity font-extrabold text-white">50%</p>
+              <p class="text-white font-semibold">Humidity</p>
+            </div>
+          </div>
+          <div class="col">
+            <img src="wind.png" alt="" />
+            <div>
+              <p class="wind py-3 mt-5 text-white font-extrabold">15km/hr</p>
+              <p class="text-white font-semibold">Wind Speed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const apiKey = "32dc8c2445a14af08d9171429232704";
+      const apiUrl = `http://api.weatherapi.com/v1/current.json?units=metric`;
+      const searchBox = document.querySelector(".searchQuery");
+      const searchBtn = document.querySelector(".search button");
+      async function checkWeather(city) {
+        const response = await fetch(apiUrl + `&key=${apiKey}` + `&q=${city}`);
+        var data = await response.json();
+        document.querySelector(".city").innerHTML = data.location.name;
+        document.querySelector(".temp").innerHTML =
+          Math.round(data.current.temp_c) + "°C";
+        document.querySelector(".humidity").innerHTML =
+          data.current.humidity + "%";
+        document.querySelector(".wind").innerHTML =
+          data.current.wind_kph + "km/hr";
+      }
+      searchBtn.addEventListener("click", () => {
+        checkWeather(searchBox.value);
+      });
+      checkWeather(city);
+    </script>
+  </body>
+</html>
